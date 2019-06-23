@@ -41,7 +41,7 @@ public class DeptEmpTransactionDaoImpl implements DeptEmpTransactionDao {
 			ePstmt.setInt(6, emp.getDno().getDeptNo());
 			log.trace(ePstmt);
 			res += ePstmt.executeUpdate();
-			
+		
 			if (res == 2) {
 				conn.commit();
 				conn.setAutoCommit(true);

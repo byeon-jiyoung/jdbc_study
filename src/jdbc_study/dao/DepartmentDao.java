@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import jdbc_study.dto.Department;
+import jdbc_study.dto.Employee;
 
 public interface DepartmentDao {
 	List<Department> selectDepartmentByAll();

@@ -20,6 +20,7 @@ public class PanelDepartment extends JPanel {
 
 		initComponents();
 	}
+	
 	private void initComponents() {
 		setBorder(new TitledBorder(null, "부서정보", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setLayout(new GridLayout(0, 2, 10, 10));

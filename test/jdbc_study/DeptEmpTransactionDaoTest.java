@@ -83,6 +83,7 @@ public class DeptEmpTransactionDaoTest {
 		System.out.println(res);
 		Assert.assertEquals(2, res);
 		
+		
 		EmployeeDao empDao = new EmployeeDaoImpl();
 		DepartmentDao deptDao = new DepartmentDaoImpl();
 		

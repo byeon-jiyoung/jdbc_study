@@ -19,7 +19,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	static final Logger log = LogManager.getLogger(); //이거는 그냥 log에 찍어보기 위해서 사용(디버깅용도)
 	
 	@Override
-	public List<Employee> selectEmployeeByAll() throws SQLException {
+	public List<Employee> selectEmployeeByAll() throws SQLException{
 		String sql = "select empno, empname, title, manager, salary, dno, pic from employee";
 		
 		//여러개를 담아야 되니까 list가 필요 (각각의 사원이 employee니까)
@@ -64,7 +64,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				}	
 			}
 		}
-		return null;
+		return selEmp;
 	}
 
 	@Override
