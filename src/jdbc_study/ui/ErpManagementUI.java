@@ -165,9 +165,15 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 
 	protected void actionPerformedBtnDelete(ActionEvent e) {
 		String deptNo = JOptionPane.showInputDialog("삭제할 부서번호를 입력하세요");
-
+		
+		if(deptNo==null) {
+			JOptionPane.showMessageDialog(null, "취소하셨습니다.");
+			return;
+		}
+		
 		try {
 			int res = dao.deleteDepartment(new Department(Integer.parseInt(deptNo)));
+			
 			if (frameDepartment == null) {
 				frameDepartment = new DepartmentUI();
 				frameDepartment.setDao(dao);
@@ -185,6 +191,12 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 	protected void actionPerformedBtnUpdate(ActionEvent e) {
 		String deptNo = JOptionPane.showInputDialog("수정할 부서번호를 입력하세요");
 		Department selDept;
+		
+		if(deptNo==null) {
+			JOptionPane.showMessageDialog(null, "취소하셨습니다.");
+			return;
+		}
+		
 		try {
 			selDept = dao.selectDepartmentByNo(new Department(Integer.parseInt(deptNo)));
 			if (selDept == null) {
@@ -192,7 +204,6 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 				return;
 			}
 			if (frameDepartment == null) {
-				frameDepartment = new DepartmentUI();
 				frameDepartment.setParent(this);
 				frameDepartment.setDao(dao);
 			}
@@ -209,6 +220,12 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 	protected void actionPerformedBtnSearch(ActionEvent e) {
 		String deptNo = JOptionPane.showInputDialog("검색할 부서번호를 입력하세요");
 		Department selDept;
+		
+		if(deptNo==null) {
+			JOptionPane.showMessageDialog(null, "취소하셨습니다.");
+			return;
+		}
+		
 		try {
 			selDept = dao.selectDepartmentByNo(new Department(Integer.parseInt(deptNo)));
 			if (selDept == null) {
@@ -272,6 +289,11 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 	
 	protected void actionPerformedBtnDelete2(ActionEvent e) {
 		String empNo = JOptionPane.showInputDialog("삭제할 사원번호를 입력하세요");
+
+		if(empNo==null) {
+			JOptionPane.showMessageDialog(null, "취소하셨습니다.");
+			return;
+		}
 		
 		try {
 			int res = dao2.deleteEmployee(new Employee(Integer.parseInt(empNo)));
@@ -316,6 +338,11 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 		String empNo = JOptionPane.showInputDialog("수정할 사원번호를 입력하세요.");
 		Employee selEmp;
 		
+		if(empNo==null) {
+			JOptionPane.showMessageDialog(null, "취소하셨습니다.");
+			return;
+		}
+		
 		try {
 			selEmp = dao2.selectEmployeeByNo(new Employee(Integer.parseInt(empNo)));
 			if(selEmp == null) {
@@ -339,6 +366,11 @@ public class ErpManagementUI extends JFrame implements ActionListener {
 	protected void actionPerformedBtnSearch2(ActionEvent e) {
 		String empNo = JOptionPane.showInputDialog("검색할 사원번호를 입력하세요.");
 		Employee selEmp;
+		
+		if(empNo==null) {
+			JOptionPane.showMessageDialog(null, "취소하셨습니다.");
+			return;
+		}
 		
 		try {
 			selEmp = dao2.selectEmployeeByNo(new Employee(Integer.parseInt(empNo)));

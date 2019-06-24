@@ -31,25 +31,12 @@ public class EmployeeUI extends JFrame implements ActionListener {
 		this.dao = dao;
 	}
 
-	
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					EmployeeUI frame = new EmployeeUI();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	
 	public EmployeeUI() {
 		initComponents();
 	}
 	
 	private void initComponents() {
+		setTitle("사원 정보");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
