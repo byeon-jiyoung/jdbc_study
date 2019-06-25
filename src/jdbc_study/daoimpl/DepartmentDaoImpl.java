@@ -19,7 +19,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	
 	@Override
 	public List<Department> selectDepartmentByAll() {
-		List<Department> lists = new ArrayList<Department>();
+		List<Department> lists = new ArrayList<Department>(); //크기가 변할 수 있으니 배열이 아닌 리스트로 받아야 한다
 		String sql = "select deptno, deptname, floor from department";
 		
 		Connection conn = null;
@@ -61,11 +61,13 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		
 		Department selDept = null;
 		
-		try (Connection conn =MySQLjdbcUtil.getConnection();
+		try (Connection conn = MySQLjdbcUtil.getConnection();
 			 PreparedStatement pstmt = conn.prepareStatement(sql);){
 			
 			pstmt.setInt(1, dept.getDeptNo());
+			
 			log.trace(pstmt);
+			
 			try(ResultSet rs = pstmt.executeQuery();){
 				if(rs.next()) {
 					selDept = getDepartment(rs);
@@ -82,7 +84,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		int res = -1;
 		
 		try(Connection conn = MySQLjdbcUtil.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql);){
+			PreparedStatement pstmt = conn.prepareStatement(sql);){
 			pstmt.setInt(1, dept.getDeptNo());
 			pstmt.setString(2, dept.getDeptName());
 			pstmt.setInt(3, dept.getFloor());

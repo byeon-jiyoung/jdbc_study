@@ -18,14 +18,15 @@ public class MySQLjdbcUtil {
 	
 	public static Connection getConnection() {
 		Connection con = null;
-		try(InputStream is =  ClassLoader.getSystemResourceAsStream("db.properties")){
-			Properties prop = new Properties();
+		try(InputStream is =  ClassLoader.getSystemResourceAsStream("db.properties")){ //is가 db.properties를 읽는다
+			Properties prop = new Properties(); //properties 파일은 entry 속성에 key 값으로 데이터들을 구분
 			prop.load(is);
-			for(Entry<Object, Object> e : prop.entrySet()){
-				System.out.printf("%s - %s%n", e.getKey(), e.getValue());
-			}
-			//데이터베이스에 연결
-			con = DriverManager.getConnection(prop.getProperty("url"), prop);
+			
+//			for(Entry<Object, Object> e : prop.entrySet()){
+//				System.out.printf("%s - %s%n", e.getKey(), e.getValue());
+//			}
+			
+			con = DriverManager.getConnection(prop.getProperty("url"), prop); //데이터베이스에 연결★★
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		} catch (SQLException e1) {

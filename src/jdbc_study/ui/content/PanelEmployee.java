@@ -2,6 +2,8 @@ package jdbc_study.ui.content;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -17,9 +19,14 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
 
 @SuppressWarnings("serial")
 public class PanelEmployee extends JPanel implements ActionListener {
@@ -30,30 +37,52 @@ public class PanelEmployee extends JPanel implements ActionListener {
 	private JTextField tfManager;
 	private JTextField tfSalary;
 	private JTextField tfDno;
-	private JButton btnAdd;
-
-	private JFileChooser chooser;
 	private JLabel lblImg;
 	
+	private String imgPath;
+	private int imgWidth;
+	private int imgHeight;
+	private JButton btnAdd;
+	
+	private JFileChooser chooser;
+	private String selectedFilePath;
+	private File picsDir;
+	
 	public PanelEmployee() {
-		chooser = new JFileChooser();
+		imgPath = System.getProperty("user.dir") + "\\images\\";
+		imgWidth = 90;
+		imgHeight = 150;
+		
+		//System.out.println(imgPath);
+		
+		chooser = new JFileChooser(imgPath);
+		
 		initComponents();
+		
+		switchImage(imgPath + "noImg.jpg");
+		
+		picsDir = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "pics" + System.getProperty("file.separator"));
+
+		if (!picsDir.exists()) {
+			picsDir.mkdir();
+		}
 	}
 	
 	private void initComponents() {
 		setBorder(new TitledBorder(null, "사원정보", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		setLayout(new GridLayout(0, 2, 10, 5));
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		JPanel pImg = new JPanel();
 		add(pImg);
-		
-		btnAdd = new JButton("사진 추가");
-		btnAdd.addActionListener(this);
-		pImg.setLayout(new BorderLayout(0, 0));
+		pImg.setLayout(new BoxLayout(pImg, BoxLayout.Y_AXIS));
 		
 		lblImg = new JLabel();
 		pImg.add(lblImg);
-		pImg.add(btnAdd, BorderLayout.SOUTH);
+		lblImg.setSize(imgWidth, imgHeight);
+		
+		btnAdd = new JButton("사진 추가");
+		btnAdd.addActionListener(this);
+		pImg.add(btnAdd);
 		
 		JPanel pContent = new JPanel();
 		add(pContent);
@@ -75,13 +104,21 @@ public class PanelEmployee extends JPanel implements ActionListener {
 		pContent.add(tfEmpName);
 		tfEmpName.setColumns(10);
 		
-		JLabel lblTitle = new JLabel("직급");
+		JLabel lblTitle = new JLabel("직책");
 		pContent.add(lblTitle);
 		lblTitle.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		tfTitle = new JTextField();
 		pContent.add(tfTitle);
 		tfTitle.setColumns(10);
+		
+		JLabel lblDno = new JLabel("부서번호");
+		pContent.add(lblDno);
+		lblDno.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		tfDno = new JTextField();
+		pContent.add(tfDno);
+		tfDno.setColumns(10);
 		
 		JLabel lblManager = new JLabel("직속상사");
 		pContent.add(lblManager);
@@ -98,14 +135,6 @@ public class PanelEmployee extends JPanel implements ActionListener {
 		tfSalary = new JTextField();
 		pContent.add(tfSalary);
 		tfSalary.setColumns(10);
-		
-		JLabel lblDno = new JLabel("부서번호");
-		pContent.add(lblDno);
-		lblDno.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		tfDno = new JTextField();
-		pContent.add(tfDno);
-		tfDno.setColumns(10);
 	}
 	
 	public void setEmployee(Employee emp) {
@@ -115,17 +144,30 @@ public class PanelEmployee extends JPanel implements ActionListener {
 		tfManager.setText(String.valueOf(emp.getManager().getEmpNo()));
 		tfSalary.setText(String.valueOf(emp.getSalary()));
 		tfDno.setText(String.valueOf(emp.getDno().getDeptNo()));
+		
+		if(emp.getPic() != null) {
+			try {
+				File imgFile = getPicFile(emp);
+				switchImage(imgFile.getAbsolutePath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else {
+			switchImage(imgPath + "noImg.jpg");
+		}
+		btnAdd.setText("변경");
+			
 	}
 	
 	public Employee getEmployee() {
 		int empNo = Integer.parseInt(tfEmpNo.getText().trim());
 		String empName = tfEmpName.getText().trim();
 		String title = tfTitle.getText().trim();
-		int manager = Integer.parseInt(tfManager.getText().trim());
+		Employee manager = new Employee(Integer.parseInt(tfManager.getText().trim()));
 		int salary = Integer.parseInt(tfSalary.getText().trim());
-		int dno = Integer.parseInt(tfDno.getText().trim());
+		Department dno = new Department(Integer.parseInt(tfDno.getText().trim()));
 		
-		return new Employee(empNo, empName, title, new Employee(manager), salary, new Department(dno));
+		return new Employee(empNo, empName, title, manager, salary, dno, getImage());
 	}
 	
 	public void clearTextField() {
@@ -135,6 +177,7 @@ public class PanelEmployee extends JPanel implements ActionListener {
 		tfManager.setText("");
 		tfSalary.setText("");
 		tfDno.setText("");
+		switchImage(imgPath + "noImg.jpg");
 	}
 	
 	public JTextField getTfEmpNo() {
@@ -148,6 +191,7 @@ public class PanelEmployee extends JPanel implements ActionListener {
 		tfManager.setEditable(isEditable);
 		tfSalary.setEditable(isEditable);
 		tfDno.setEditable(isEditable);
+		btnAdd.setVisible(false);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -157,7 +201,7 @@ public class PanelEmployee extends JPanel implements ActionListener {
 	}
 	
 	protected void actionPerformedBtnAdd(ActionEvent e) {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("GIF Images", "gif");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG Images", "jpg");
 		chooser.setFileFilter(filter);
 		
 		int ret = chooser.showOpenDialog(null);
@@ -165,8 +209,42 @@ public class PanelEmployee extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다.", "경고", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
-		String selectedFilePath = chooser.getSelectedFile().getPath();
+		selectedFilePath = chooser.getSelectedFile().getPath();
 		
-		lblImg.setIcon(new ImageIcon(selectedFilePath));
+		switchImage(selectedFilePath);
+		btnAdd.setText("변경");
+		repaint();
+		revalidate();
+	}
+	
+	private void switchImage(String filePath) {
+		Image tmpIcon = new ImageIcon(filePath).getImage().getScaledInstance(imgWidth, imgHeight, Image.SCALE_SMOOTH);
+		ImageIcon imageIcon = new ImageIcon(tmpIcon);
+		lblImg.setIcon(imageIcon);
+	}
+	
+	private File getPicFile(Employee e) throws FileNotFoundException, IOException {
+		File file = null;
+		file = new File(picsDir, e.getEmpName() + ".jpg");
+		try (FileOutputStream fos = new FileOutputStream(file)) {
+			fos.write(e.getPic());
+		}
+		return file;
+	}
+	
+	private byte[] getImage() {
+		byte[] pic = null;
+
+		File imgFile = new File(selectedFilePath);
+
+		try (InputStream is = new FileInputStream(imgFile);) {
+			pic = new byte[is.available()];
+			is.read(pic);
+		} catch (FileNotFoundException e) {
+			System.out.println("해당 파일을 찾을 수 없음");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return pic;
 	}
 }

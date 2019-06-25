@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -21,6 +23,10 @@ public class DepartmentListUI extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private List<Department> deptList;
+	
+	private JPopupMenu popupMenu;
+	private JMenuItem mntmPopUpdate;
+	private JMenuItem mntmPopDelete;
 	
 	public DepartmentListUI() {
 		initComponents();
@@ -44,6 +50,17 @@ public class DepartmentListUI extends JFrame {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		popupMenu = new JPopupMenu();
+		
+		mntmPopUpdate = new JMenuItem("수정");
+		popupMenu.add(mntmPopUpdate);
+		
+		mntmPopDelete = new JMenuItem("삭제");
+		popupMenu.add(mntmPopDelete);
+		
+		table.setComponentPopupMenu(popupMenu);
+		scrollPane.setComponentPopupMenu(popupMenu);
 	}
 
 	public void reloadData() {
@@ -89,5 +106,4 @@ public class DepartmentListUI extends JFrame {
 			cModel.getColumn(i).setPreferredWidth(width[i]);
 		}
 	}
-	
 }

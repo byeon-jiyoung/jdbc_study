@@ -118,4 +118,8 @@ public class EmployeeUI extends JFrame implements ActionListener {
 		pContent.getTfEmpNo().setEditable(false);
 		btnAdd.setText("수정");
 	}
+
+	public void clearEmployee() {
+		pContent.clearTextField();
+	}
 }

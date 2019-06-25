@@ -117,4 +117,8 @@ public class DepartmentUI extends JFrame implements ActionListener {
 	public void setParent(ErpManagementUI erpManagementUI) {
 		this.erpManagementUI = erpManagementUI;
 	}
+	
+	public void clearDepartment() {
+		pContent.clearTextField();
+	}
 }

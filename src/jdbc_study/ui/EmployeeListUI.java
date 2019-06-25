@@ -62,7 +62,7 @@ public class EmployeeListUI extends JFrame {
 	}
 
 	private String[] getColumnNames() {
-		return new String[] {"사원번호", "사원명", "직급", "직속상사", "급여", "부서번호"};
+		return new String[] {"사원번호", "사원명", "직책", "직속상사", "급여", "부서번호"};
 	}
 
 	private Object[][] getRows() {
