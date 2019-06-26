@@ -32,7 +32,9 @@ public class EmployeeListUI extends JFrame {
 //			}
 //		});
 //	}
-
+	private ErpManagementUI parent;
+	
+	
 	public EmployeeListUI() {
 		initComponents();
 	}
@@ -71,5 +73,13 @@ public class EmployeeListUI extends JFrame {
 			rows[i] = empList.get(i).toArray();
 		}
 		return rows;
+	}
+
+	public void setEmployeeList(List<Employee> empList) {
+		this.empList = empList;
+	}
+	
+	public void setErpManagementUI(ErpManagementUI erpManagementUI) {
+		this.parent = erpManagementUI;
 	}
 }

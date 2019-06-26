@@ -120,5 +120,6 @@ public class DepartmentUI extends JFrame implements ActionListener {
 	
 	public void clearDepartment() {
 		pContent.clearTextField();
+		btnAdd.setText("추가");
 	}
 }
